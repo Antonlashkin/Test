@@ -244,7 +244,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.18039216, g: 0.19215687, b: 0.27058825, a: 0}
+  m_BackGroundColor: {r: 0.18039216, g: 0.19215688, b: 0.27058825, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -337,7 +337,7 @@ Transform:
   - {fileID: 1651931132}
   - {fileID: 36975966}
   m_Father: {fileID: 1962723077}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &745059896 stripped
 RectTransform:
@@ -775,8 +775,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1101458747}
-  m_Father: {fileID: 1962723077}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -919,7 +919,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 239393046}
-  - {fileID: 1735818445}
   - {fileID: 663116047}
   m_Father: {fileID: 0}
   m_RootOrder: 1

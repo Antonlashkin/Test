@@ -30,7 +30,6 @@ namespace App.Scripts.Infrastructure.SceneManagement.Installer
 
             var controllerInitViewSceneChange = new ControllerInitNavigator(sceneNavigator, viewItemSelector);
             serviceContainer.SetService<IInitializable, ControllerInitNavigator>(controllerInitViewSceneChange);
-
         }
     }
 }
