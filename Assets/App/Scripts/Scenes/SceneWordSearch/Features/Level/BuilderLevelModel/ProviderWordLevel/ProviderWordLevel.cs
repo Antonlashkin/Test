@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Collections.Generic;
 using App.Scripts.Scenes.SceneWordSearch.Features.Level.Models.Level;
 using UnityEngine;
 
@@ -8,11 +10,13 @@ namespace App.Scripts.Scenes.SceneWordSearch.Features.Level.BuilderLevelModel.Pr
     {
         public LevelInfo LoadLevelData(int levelIndex)
         {
+            string json = File.ReadAllText(@$"Assets/App/Resources/WordSearch/Levels/{levelIndex}.json");
 
+            LevelInfo levelInfo = new LevelInfo();
+            JsonParser jsonParse = JsonParser.CreateFromJSON(json);
+            levelInfo.words = jsonParse.words;
 
-            Debug.Log("Сыс!");
-            //напиши реализацию не меняя сигнатуру функции
-            throw new NotImplementedException();
+            return levelInfo;
         }
     }
 }
