@@ -11,12 +11,15 @@ namespace App.Scripts.Scenes.SceneFillwords.Features.ProviderLevel
 {
     public class ProviderFillwordLevel : IProviderFillwordLevel
     {
-        private int maxLevel = 9;
+        private int maxLevel = 10;
         private int level = -1;
         private int laterIndex = 0;
         private bool isNextLevel = true;
         private string[] splitLevels = File.ReadAllText(@"Assets/App/Resources/Fillwords/pack_0.txt").Split('\n');
         private string[] splitWords = File.ReadAllText(@"Assets/App/Resources/Fillwords/words_list.txt").Split('\n');
+        private List<GridFillWords> levels = new List<GridFillWords>();
+
+
         public GridFillWords LoadModel(int index)
         {
             if (((laterIndex < index) || (laterIndex > index && laterIndex == 3 && index == 1)) && !(laterIndex < index && laterIndex == 1 && index == 3))
@@ -30,49 +33,58 @@ namespace App.Scripts.Scenes.SceneFillwords.Features.ProviderLevel
 
             SwitcLevel();
 
-
-            GridFillWords grid = null;
-            bool isNormalGrid = false;
-            int numberOfInvalidLevels = 0;
-            while (!isNormalGrid)
+            if (levels.Count == 0)
             {
-                if (!GridMake(ref grid))
+                for (int i = 0; i < maxLevel; i++)
                 {
-                    numberOfInvalidLevels++;
-                    SwitcLevel();
-                }
-                else
-                {
-                    isNormalGrid = true;
-                }
-                if (numberOfInvalidLevels == maxLevel)
-                {
-                    throw new Exception();
+                    levels.Add(GridMake(i));
                 }
             }
+            
+
+
+            int validLevels = 0;
+            for (int i = 0; i < maxLevel; i++)
+            {
+                if (levels[i] != null)
+                {
+                    validLevels++;
+                }
+            }
+            if (validLevels == 0)
+            {
+                throw new Exception();
+            }
+
+            while (levels[level] == null)
+            {
+                SwitcLevel();
+            }
+
             laterIndex = index;
-            return grid;
+            Debug.Log(level);
+            return levels[level];
         }
 
 
-        private bool GridMake(ref GridFillWords grid)
+        private GridFillWords GridMake(int levelIndex)
         {
+            GridFillWords grid;
             int gridLenght = 0;
             for (int i = 0; i < splitLevels.Length; i++)
             {
-                gridLenght = CountNumberOfGrid();
+                gridLenght = CountNumberOfGrid(levelIndex);
                 if (gridLenght != 0)
                 {
                     break;
                 }
                 else
                 {
-                    return false;
+                    return null;
                 }
             }
 
 
-            //Debug.Log(splitLevels[level]);
 
             if (gridLenght == 0)
             {
@@ -81,30 +93,30 @@ namespace App.Scripts.Scenes.SceneFillwords.Features.ProviderLevel
 
             grid = new GridFillWords(new Vector2Int(gridLenght, gridLenght));
 
-            if (!WordCheck(ref grid, gridLenght))
+            if (!WordCheck(ref grid, gridLenght, levelIndex))
             {
-                return false;
+                return null;
             }
-            return true;
+            return grid;
         }
 
 
-        private int CountNumberOfGrid()
+        private int CountNumberOfGrid(int levelIndex)
         {
             int numberOfSpace = 0;
             int numberOfSemicolon = 0;
 
-            for (int i = 0; i < splitLevels[level].Length; i++)
+            for (int i = 0; i < splitLevels[levelIndex].Length; i++)
             {
-                if (splitLevels[level][i] == ' ')
+                if (splitLevels[levelIndex][i] == ' ')
                 {
                     numberOfSpace++;
                 }
             }
 
-            for (int i = 0; i < splitLevels[level].Length; i++)
+            for (int i = 0; i < splitLevels[levelIndex].Length; i++)
             {
-                if (splitLevels[level][i] == ';')
+                if (splitLevels[levelIndex][i] == ';')
                 {
                     numberOfSemicolon++;
                 }
@@ -123,11 +135,11 @@ namespace App.Scripts.Scenes.SceneFillwords.Features.ProviderLevel
         }
 
 
-        public bool WordCheck(ref GridFillWords grid, int gridLenght)
+        public bool WordCheck(ref GridFillWords grid, int gridLenght, int levelIndex)
         {
             List<int> wordNumber = new List<int>();
             List<List<int>> numberOfLettersInAWord = new List<List<int>>();
-            string[] wordsAndLettersNumbers = splitLevels[level].Split(' ');
+            string[] wordsAndLettersNumbers = splitLevels[levelIndex].Split(' ');
 
 
 
@@ -221,7 +233,7 @@ namespace App.Scripts.Scenes.SceneFillwords.Features.ProviderLevel
         {
             if (isNextLevel)
             {
-                if (level == maxLevel)
+                if (level == maxLevel - 1)
                 {
                     level = 0;
                 }
@@ -234,18 +246,13 @@ namespace App.Scripts.Scenes.SceneFillwords.Features.ProviderLevel
             {
                 if (level == 0)
                 {
-                    level = maxLevel;
+                    level = maxLevel - 1;
                 }
                 else
                 {
                     level--;
                 }
             }
-        }
-
-        private void Cheks()
-        {
-
         }
     }
 }
