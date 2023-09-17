@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using App.Scripts.Scenes.SceneChess.Features.ChessField.GridMatrix;
 using App.Scripts.Scenes.SceneChess.Features.ChessField.Types;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
@@ -22,7 +24,7 @@ namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
             Vector2Int next = from;
             while (next != to)
             {
-                next = NextStep(next, to, unit, isBlocked, locomotionPattern, costWayFromSatrt, sumCost, root)
+                next = NextStep(next, to, from, unit, isBlocked, locomotionPattern, costWayFromSatrt, sumCost, root);
                 if (next.x == -1 || next.y == -1 )
                 {
                     return new List<Vector2Int> { from };
@@ -36,7 +38,7 @@ namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
 
 
 
-        private Vector2Int NextStep(Vector2Int now, Vector2Int to, ChessUnitType unit, bool[,] isBlocked, List<List<bool>> locomotionPattern, float[,] costWayFromSatrt, float[,] sumCost, Vector2Int[,] root)
+        private Vector2Int NextStep(Vector2Int now, Vector2Int to, Vector2Int from, ChessUnitType unit, bool[,] isBlocked, List<List<bool>> locomotionPattern, float[,] costWayFromSatrt, float[,] sumCost, Vector2Int[,] root)
         {
             int jMin;
             int jMax;
@@ -131,7 +133,13 @@ namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
                         continue;
                     }
 
-                    float wayFromStartNow = -(1/10) * (Mathf.Sqrt(Mathf.Pow(i, 2) + Mathf.Pow(j, 2))) + 1 + costWayFromSatrt[now.x, now.y];
+                    float straightAheadCorrection = 0;
+                    if(j == now.x - root[now.x,now.y].x || i == now.y - root[now.x, now.y].y)
+                    {
+                        straightAheadCorrection = 0.5f;
+                    }
+
+                    float wayFromStartNow = (Mathf.Sqrt(Mathf.Pow(i, 2) + Mathf.Pow(j, 2))) + 1 + costWayFromSatrt[now.x, now.y] - straightAheadCorrection;
                     if (costWayFromSatrt[now.x + j, now.y + i] > wayFromStartNow || costWayFromSatrt[now.x + j, now.y + i] == 0) 
                     {
                         root[now.x + j, now.y + i] = new Vector2Int(now.x, now.y);
@@ -161,6 +169,7 @@ namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
             if (next.x != -1 || next.y != -1)
             {
                 isBlocked[next.x, next.y] = true;
+                return next;
             }
             return next;
         }

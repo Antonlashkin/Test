@@ -62,7 +62,6 @@ namespace App.Scripts.Scenes.SceneFillwords.Features.ProviderLevel
             }
 
             laterIndex = index;
-            Debug.Log(level);
             return levels[level];
         }
 
