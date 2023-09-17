@@ -16,23 +16,18 @@ namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
             float[,] costWayFromSatrt = new float[8, 8];
             float[,] sumCost = new float[8, 8];
             Vector2Int[,] root = new Vector2Int[8, 8];
-            Debug.Log(from);
-            Debug.Log(to);
             List<Vector2Int> path = new List<Vector2Int>();
             Blocked(grid, from, isBlocked);
             CreatingAPattern(unit, locomotionPattern);
             Vector2Int next = from;
-            int iterator = 0;
-            //costWayFromSatrt[from.x, from.y] = 0;
             while (next != to)
             {
-                next = NextStep(next, to, unit, isBlocked, locomotionPattern, costWayFromSatrt, sumCost, root);
-                //Debug.Log(next);
-                if (iterator>10)
+                next = NextStep(next, to, unit, isBlocked, locomotionPattern, costWayFromSatrt, sumCost, root)
+                if (next.x == -1 || next.y == -1 )
                 {
-                    break;
+                    return new List<Vector2Int> { from };
+                    //return null; //If you need NULL
                 }
-                iterator++;
             }
             path = PathCreation(from, to, root, unit);
             return path;
@@ -108,7 +103,7 @@ namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
 
                 if (now.x == 1)
                 {
-                    jMin = 1;
+                    jMin = - 1;
                 }
                 if (now.x == 6)
                 {
@@ -118,7 +113,7 @@ namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
 
                 if (now.y == 1)
                 {
-                    iMin = 1;
+                    iMin = - 1;
                 }
                 if (now.y == 6)
                 {
@@ -136,36 +131,37 @@ namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
                         continue;
                     }
 
-                    float wayFromStartNow = /*(Mathf.Sqrt(Mathf.Pow(i, 2) + Mathf.Pow(j, 2)))*/ 1 + costWayFromSatrt[now.x, now.y];
+                    float wayFromStartNow = -(1/10) * (Mathf.Sqrt(Mathf.Pow(i, 2) + Mathf.Pow(j, 2))) + 1 + costWayFromSatrt[now.x, now.y];
                     if (costWayFromSatrt[now.x + j, now.y + i] > wayFromStartNow || costWayFromSatrt[now.x + j, now.y + i] == 0) 
                     {
+                        root[now.x + j, now.y + i] = new Vector2Int(now.x, now.y);
                         costWayFromSatrt[now.x + j, now.y + i] = wayFromStartNow;
                     }
-                    //if (now == to)
-                    //{
-                    //    return new Vector2Int();
-                    //}
                     sumCost[now.x + j, now.y + i] = costWayFromSatrt[now.x + j, now.y + i] + (Mathf.Abs(now.x + j - to.x) + Mathf.Abs(now.y + i - to.y));
                 }
             }
             Vector2Int next = new Vector2Int();
-            for (int i = 0; i <= 7; i++)
+            next.x = -1;
+            next.y = -1;
+            for (int i = 0; i < 8; i++)
             {
-                for (int j = 0; j <= 7; j++)
+                for (int j = 0; j < 8; j++)
                 {
-                    if (sumCost[i, j] == 0 || isBlocked[i,j]  || (j == now.x && i == now.y))
+                    if (sumCost[i, j] == 0 || isBlocked[i,j])
                     {
                         continue;
                     }
-                    if (sumCost[i,j] < minValue)
+                    if (sumCost[i,j] < minValue || (j == to.x && i == to.y))
                     {
                         next = new Vector2Int(i, j);           
                         minValue = sumCost[i,j];        
                     }
                 }
             }
-            isBlocked[next.x, next.y] = true;
-            root[next.x, next.y] = new Vector2Int(now.x, now.y);
+            if (next.x != -1 || next.y != -1)
+            {
+                isBlocked[next.x, next.y] = true;
+            }
             return next;
         }
 
@@ -250,7 +246,7 @@ namespace App.Scripts.Scenes.SceneChess.Features.GridNavigation.Navigator
                     {
                         for (int j = 0; j < ellementsInOneLine; j++)
                         {
-                            path.Remove(path[i - ellementsInOneLine]);
+                            path.Remove(path[i - ellementsInOneLine + 1]);
                         }
                         i -= ellementsInOneLine;
                         ellementsInOneLine = 0;
