@@ -387,7 +387,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1822227534}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -462,7 +462,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1822227534}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &648108298
 GameObject:
@@ -709,9 +709,6 @@ MonoBehaviour:
   configLevelSelection:
     TotalLevelCount: 3
     InitLevelIndex: 1
-  configLevelLoading:
-    FolderResourceLevels: WordSearch/Levels
-    FormatLevelName: '{0}'
 --- !u!1 &1050486781
 GameObject:
   m_ObjectHideFlags: 0
@@ -1112,7 +1109,7 @@ RectTransform:
   m_Children:
   - {fileID: 1821216692}
   m_Father: {fileID: 1822227534}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1254,7 +1251,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 45.00006}
+  m_AnchoredPosition: {x: 0, y: 45.000122}
   m_SizeDelta: {x: -20, y: -110}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1821216691
@@ -1267,6 +1264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1821216692}
   - component: {fileID: 1821216693}
+  - component: {fileID: 1821216694}
   m_Layer: 5
   m_Name: container
   m_TagString: Untagged
@@ -1325,6 +1323,14 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!222 &1821216694
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821216691}
+  m_CullTransparentMesh: 1
 --- !u!1 &1822227533
 GameObject:
   m_ObjectHideFlags: 0
@@ -1353,9 +1359,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 519420032}
   - {fileID: 1367619461}
   - {fileID: 513090821}
-  - {fileID: 519420032}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
